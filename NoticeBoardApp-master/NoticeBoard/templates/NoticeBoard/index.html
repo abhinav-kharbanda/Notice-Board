@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Notice Gallery</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/Media/Data/style.css">  
+    <link rel="stylesheet" href="/Media/Data/theme-minimalist-round.css">
+
+  <script type="text/javascript" src="/Media/Data/Jquery.js"></script>
+    <!-- AnythingSlider -->
+  <link rel="stylesheet" href="/Media/Data/anythingslider.css">
+  <script src="/Media/Data/jquery.anythingslider.min.js"></script>
+
+  <!-- AnythingSlider video extension; optional, but needed to control video pause/play -->
+  <script src="/Media/Data/jquery.anythingslider.video.min.js"></script>
+  <script type="text/javascript">
+
+  var playvid = function(slider) {
+    var vid = slider.$currentPage.find('video');
+    if (vid.length) {
+        // autoplay
+        $('.overlay').fadeIn(500);
+        vid[0].play();
+    }
+};
+$(function(){
+  if($('#header .news li').length>1){
+    setInterval(function(){
+      $('#header .news li:first').slideUp( function () { $(this).appendTo($('#header .news')).slideDown(); });
+    }, 5000);
+  }
+  setInterval(function(){
+    window.location.reload();
+  },900000)
+  $('#notices li:last-child').addClass('last');
+var video=document.getElementById('video');
+if(video){
+  video.onended = function() {
+  if($('#video').parent('li').hasClass('last'))
+  {
+  window.location.reload();
+  }
+}
+}
+
+$('#notices').anythingSlider({
+  // Appearance
+  theme               : "default", // Theme name
+  mode                : 'f',   // Set mode to "horizontal", "vertical" or "fade" (only first letter needed); replaces vertical option
+  expand              : true,     // If true, the entire slider will expand to fit the parent element
+  resizeContents      : false,      // If true, solitary images/objects in the panel will expand to fit the viewport
+
+  buildArrows         : false,      // If true, builds the forwards and backwards buttons
+  buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
+  buildStartStop      : false,      // If true, builds the start/stop button
+  enableKeyboard      : false,      // if false, keyboard arrow keys will not work for this slider.
+
+  // Navigation
+  startPanel          : 1,         // This sets the initial panel
+  changeBy            : 1,         // Amount to go forward or back when changing panels.
+  hashTags            : false,      // Should links change the hashtag in the URL?
+  infiniteSlides      : true,      // if false, the slider will not wrap & not clone any panels
+
+  // Slideshow options
+  autoPlay            : true,     // If true, the slideshow will start running; replaces "startStopped" option
+  autoPlayLocked      : true,     // If true, user changing slides will not stop the slideshow
+  autoPlayDelayed     : true,     // If true, starting a slideshow will delay advancing slides; if false, the slider will immediately advance to the next slide when slideshow starts
+  pauseOnHover        : false,      // If true & the slideshow is active, the slideshow will pause on hover
+  stopAtEnd           : false,     // If true & the slideshow is active, the slideshow will stop on the last page. This also stops the rewind effect when infiniteSlides is false.
+  playRtl             : false,     // If true, the slideshow will move right-to-left
+
+  // Times
+  delay               : 10000,      // How long between slideshow transitions in AutoPlay mode (in milliseconds)
+  resumeDelay         : 10000,     // Resume slideshow after user interaction, only if autoplayLocked is true (in milliseconds).
+  animationTime       : 1000,       // How long the slideshow transition takes (in milliseconds)
+  delayBeforeAnimate  : 0,         // How long to pause slide animation before going to the desired slide (used if you want your "out" FX to show).
+
+  // Callbacks
+  onBeforeInitialize  : function(e, slider) {}, // Callback before the plugin initializes
+  onInitialized       : function(e, slider) {playvid(slider);}, // Callback when the plugin finished initializing
+  onShowStart         : function(e, slider) {}, // Callback on slideshow start
+  onShowStop          : function(e, slider) {}, // Callback after slideshow stops
+  onShowPause         : function(e, slider) {}, // Callback when slideshow pauses
+  onShowUnpause       : function(e, slider) {}, // Callback when slideshow unpauses - may not trigger properly if user clicks on any controls
+  onSlideInit         : function(e, slider) {var vid = slider.$lastPage.find('video');
+        if (vid.length && typeof(vid[0].pause) !== 'undefined') {
+            vid[0].pause();
+            $('.overlay').fadeOut();
+
+        }}, // Callback when slide initiates, before control animation
+  onSlideBegin        : function(e, slider) {}, // Callback before slide animates
+  onSlideComplete     : function(slider) {playvid(slider);},    // Callback when slide completes; this is the only callback without an event "e" parameter
+
+  // Interactivity
+  clickForwardArrow   : "click",         // Event used to activate forward arrow functionality (e.g. add jQuery mobile's "swiperight")
+  clickBackArrow      : "click",         // Event used to activate back arrow functionality (e.g. add jQuery mobile's "swipeleft")
+  clickControls       : "click focusin", // Events used to activate navigation control functionality
+  clickSlideshow      : "click",         // Event used to activate slideshow play/stop button
+  allowRapidChange    : false,           // If true, allow rapid changing of the active pane, instead of ignoring activity during animation
+
+  // Video
+  resumeOnVideoEnd    : true,      // If true & the slideshow is active & a supported video is playing, it will pause the autoplay until the video is complete
+  resumeOnVisible     : true,      // If true the video will resume playing (if previously paused, except for YouTube iframe - known issue); if false, the video remains paused.
+  addWmodeToObject    : "opaque",  // If your slider has an embedded object, the script will automatically add a wmode parameter with this setting
+  isVideoPlaying      : function(slider) {
+        var vid = slider.$currentPage.find('video');
+        return (vid.length && typeof(vid[0].pause) !== 'undefined' && !vid[0].paused && !vid[0].ended);
+    }
+ // return true if video is playing or false if not - used by video extension
+});
+});
+
+
+  </script>
+</head>
+<body>
+  <div class="overlay"></div>
+  <img src='/Media/Data/ITM-logo.jpg' class='logo' />
+  {% if nw %}
+  <div id="header">
+    <img src='/Media/Data/ITM-Bird.png' class='bird' />
+    <ul class="news">
+      {% for news in nw %}
+      <li>{{ news.title }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <div id="main">
+    <div id="carousel">
+      <ul id="notices">
+        {% for notice in notices %}
+        <li>
+          {% if notice.display_video %}
+          <video id="video" width="800" height="600">
+            <source src='/Media/{{ notice.video.url }}' type="video/mp4">
+            </video>
+            {% else %}
+            <span class='date'>
+              {{ notice.publish_date }}
+            </span>
+            {% if notice.display_title %}
+            <div class='title'>
+              {{ notice.title }}
+            </div>
+            <div class='sub_title'>
+              {{ notice.sub_title }}
+            </div>
+            {% endif %}
+            {% if notice.content %}
+            <div class='content_wrap'>
+              {{ notice.content }}
+            </div>
+            {% endif %}
+            {% if notice.image %}
+            <div class='notice_image'>
+              <img src='/Media/{{ notice.image }}' /></div>
+              {% endif %}
+              {% if notice.sign_image  %}
+              <img src='/Media/{{ notice.sign_image }}' class='notice_sign' />            
+              {% endif %}
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </body> 
+    </html>
